@@ -1,0 +1,136 @@
+Dependency Injection Nedir ? Nasıl Uygulanır ?
+
+Dependency injection kaba tabir ile bir sınıfın/nesnenin bağımlılıklardan kurtulmasını amaçlayan ve 
+o nesneyi olabildiğince bağımsızlaştıran bir programlama tekniği/prensibidir.
+
+Dependency Injection uygulayarak;
+bir sınıfının bağımlı olduğu nesneden bağımsız hareket edebilmesini sağlayabilir ve 
+kod üzerinde olası geliştirmelere karşın değişiklik yapma ihtiyacını ortadan kaldırabilirsiniz.
+
+Inversion of control makalesinde bahsettiğim gibi frameworkler sizin sadece business logic ile ilgilenmenizi sağlar, 
+diğer tüm operasyonları ise kendi halleder. 
+Bunu da frameworkten bağımsız bir şekilde kod yazabilmemiz için genellikle dependency injection uygulayarak sağlar.
+
+Dependency Injection uygulamanın avantajları nelerdir ?
+Bağımlılık oluşturacak nesneleri direkt olarak kullanmak yerine, bu nesneleri dışardan verilmesiyle sistem içerisindeki bağımlılığı minimize etmek amaçlanır. 
+Böylece bağımlılık bulunan sınıf üzerindeki değişikliklerden korunmuş oluruz.
+Unit testlerin yazımını kolaylaştırırken doğruluğunu da artırır. 
+Yazılım geliştirmedeki en önemli konulardan biri de yazılım içerisinde bulunan componentlerin “loosely coupled” (gevşek bağlı) olmasıdır. 
+Dependency Injection’da bunu sağlayabilen önemli tekniklerden birisidir. Böylece bağımsızlığı sağlanan sınıflar tek başına test edilebilir.
+
+Dependency Injection Nasıl Uygulanır ? (Kod Örneğiyle)
+İlk olarak bağımlılıktan söz edebiliriz. 
+Bir Car sınıfı, DieselEngine sınıfının bazı fonksiyonlarını kullanıyorsa, o zaman Car sınıfının DieselEngine sınıfına bağımlıdır. 
+Çoğu OOP programlama dilinde, diğer sınıflara ait nesneleri/metotları kullanabiliriz. 
+Örneğin Java’da diğer sınıflara ait nesneleri kullanabilmemiz için ilk olarak kullanacağımız sınıfı oluşturmamız gerekir. 
+Car sınıfı DieselEngine sınıfının bir instance’ını oluşturmalıdır.
+
+
+Bağımlı bir kod örneği
+Kod örneği üzerinden ilerleyecek olursak, 
+Car’ın DieselEngine’e bir bağımlılığı olduğunu görebiliriz. 
+Car, DieselEngine sınıfı üzerindeki bir metodu çağırmaktadır. 
+Bu durum bağımlılığa neden olmaktadır.
+
+Bağımlılıkların her zaman önünüze bir engel olarak çıkacağını unutmamalıyız. 
+Kod büyüdükçe sorunlar çoğalır ve bağımlılıkları azaltmanız bir o kadar zorlaşacaktır.
+
+Örnek kodun sorunları neler olabilir ?
+
+Kod esnek değildir. Bakımı ve genişletilebilirliği zordur. DieselEngine sınıfında yapılacak herhangi bir değişiklik 
+Car üzerinde de değişikliğe neden olacaktır. Bağımlılıklar Unit testi zorlaştırır. 
+Yalnızca bir sınıfın işlevlerini test etmek istendiğinde, diğer bağlı sınıfları da test etmeniz gerekir.
+Sınıflar arası bağımlılık fazla olduğu için bir işlevi başka bir sınıfın yeniden kullanması oldukça zorlaşır. 
+Çünkü bağımlılık demek çoğu zaman, sınıfların birbirleri için geliştirilmiş olması anlamına gelir.
+Bütün bu sorunları dependency injection ile çözebiliyoruz. 
+DI ile bu dezavantajları gidererek kodu değişikliklere daha esnek, birim testine daha uygun ve gerçekten yeniden kullanılabilir hale getirmiş oluyoruz.
+
+İlk olarak, sınıfların işlevlerini ve metotlarını tanımlamak için interfaceler kullanmalıyız. 
+Car sınıfının da, DieselEngine gibi alt dalları olabileceğini unutmamalıyız. 
+Bu nedenle hem Car sınıfını bir interface haline getiriyoruz hem de DieselEngine yerine daha genel bir kullanım için Engine interface’i haline getiriyoruz.
+
+public interface Car {
+    void drive();
+}
+ 
+public interface Engine {
+    String start();
+}
+
+Böylece DieselEngine sınıfını Engine’in bir implementasyonu olarak kullanabiliriz. 
+Engine interface’ini oluşturmamız başka Engine implementasyonlarını kullanabilmemizi sağlayacaktır.
+
+public class DieselEngine implements Engine {
+ 
+    @Override
+    public String start() {
+        return "Diesel Engine started.";
+    }
+}
+
+Ardından, ElectricEngine ve GasolineEngine gibi farklı Engine uygulamalarına sahip olabiliriz:
+
+public class ElectricEngine implements Engine {
+ 
+    @Override
+    public String start() {
+        return "Electric Engine started.";
+    }
+}
+
+public class GasolineEngine implements Engine {
+ 
+    @Override
+    public String start() {
+        return "Gasoline Engine started.";
+    }
+}
+
+Ve Car interface’ini kullanan bir AutoCar implementasyonu yazabiliriz. 
+Bu sınıf somut bir sınıf yerine (DieselEngine yerine) Engine gibi soyut bir sınıfı kullanacaktır — asıl kullanılmak istenen Engine yine kullanılabilir, 
+bu uygulama constructor üzerinden sağlanabilir. Engine sınıfı constructor injection yoluyla AutoCar sınıfa “enjekte edilir”:
+
+public class AutoCar implements Car {
+     
+    Engine engine;
+     
+    public AutoCar(Engine engine) {
+        this.engine = engine;
+    }
+ 
+    @Override
+    public void drive() {
+         
+        String engineStart = engine.start();
+         
+    }
+}
+
+AutoCar sınıfı artık herhangi bir Engine implementasyonuna bağımlı değildir. 
+Doğrudan AutoCar’da bağımlı sınıfı oluşturmak yerine, dependency injection uyguladığımız için container veya framework 
+artık bu sınıfı oluşturmaktan ve constructor aracılığıyla onu AutoCar sınıfına enjekte etmekten sorumludur.
+
+Örneğin:
+
+Engine engine = new ElectricEngine();
+Car car = new AutoCar(engine);
+car.drive();
+
+Bu örnekte, ElectricEngine nesnesi Engine interface’inin bir implementasyonu olarak oluşturulur ve 
+böylece AutoCar nesnesi, engine nesnesini hangi implementasyon (ElectricEngine,DieselEngine gibi) olduğundan bağımsız olarak engine nesnesini kullanabilir. 
+AutoCar yalnızca enjekte edilen yani kullandığı nesnenin Engine türünde olduğunu bilir.
+
+Constructor injection’ın yanı sıra, setter injection ‘da oldukça yaygın olarak kullanılır. 
+AutoCar sınıfına aşağıdaki gibi setter yöntemini uygulayabiliriz.
+
+public void setEngine(Engine engine) {
+       this.engine = engine;
+}
+
+setter injection uyguladığımızda DieselEngine kullanım örneğinde olduğu gibi farklı Engine implementasyonlarını kullanabilir hale geliriz.
+
+((AutoCar) car).setEngine(new DieselEngine());
+car.drive();
+
+Bağımlılığı yönetmek için burada bütün koşulları kendimiz yönettik, popüler frameworkler dependency injection’ını kendisi halleder. 
+Spring buna belirgin bir örnektir. Dependency Injection’ı uygulamak SOLID prensipleri gibi her zaman göz önünde bulundurulması ve uygulanması gereken ana tekniklerden biridir.

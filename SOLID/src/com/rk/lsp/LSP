@@ -1,0 +1,18 @@
+Liskov Substitution Prensibi Nedir ?
+
+Kodlarımızda herhangi bir değişiklik yapmaya gerek duymadan alt sınıfları, türedikleri(üst) sınıfların yerine kullanabilmeliyiz.
+
+Türeyen sınıf yani alt sınıflar ana(üst) sınıfın tüm özelliklerini ve metotlarını aynı işlevi gösterecek 
+şekilde kullanabilme ve kendine ait yeni özellikler barındırabilmelidir.
+
+Alt seviye sınıflardan oluşan nesnelerin/sınıfların, ana(üst) sınıfın nesneleri ile yer değiştirdikleri zaman, 
+aynı davranışı sergilemesi gerekmektedir. Türetilen sınıflar, türeyen sınıfların tüm özelliklerini kullanabilmelidir.”
+
+Matematiksel olarak karenin dikdörtgenden türediğini varsayabiliriz. 
+Ama davranışsal olarak Kare Dikdörtgenin yerine geçmez, bu hiyerarşi Liskov prensibini (LSP) ihlal eder.
+
+O halde kareyi ve dikdörtgen’i LSP’ye prensibe uygun hale getirelim.
+Bu prensip, Open/Closed prensibine benzer ve open/closed prensibine uymak liskov prensibinin uygulanmasını kolaylaştırmaktadır.
+
+Bir karenin yüksekliğinin / genişliğinin değiştirilmesi, bir dikdörtgenin yüksekliğinin / genişliğinin değiştirilmesinden daha farklı davranır. 
+Her ikiside birer şekli temsil eder. Buradan yola çıkarak şekil interface’ini oluşturalım.

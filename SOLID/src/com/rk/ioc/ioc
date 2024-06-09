@@ -1,0 +1,32 @@
+Inversion of Control ( IoC ) Nedir 
+
+Inversion of control bir yazılım tasarım prensibidir. 
+Ioc ile Uygulama içerisindeki obje instance’larının yönetimi sağlanarak, bağımlılıklarını en aza indirgemek amaçlanmaktadır. 
+Projeniz deki bağımlılıkların oluşturulmasını ve yönetilmesini geliştiricinin yerine, framework’ün yapması olarak da açıklanabilir.
+
+Framework‘in üzerinde çalıştığımız da görülüyor ki; 
+frameworkler birçok işi kendisi yapmakta ve bizim kodumuzu çalıştırmak için framework gerekli kaynakları ve çalışması gereken metotları oluşturup, yönetmektedir. 
+Yazdığımız kod bloğu çalışacağı zaman, framework bizim kodumuzu çağırır ve çalıştırır 
+daha sonra kontrol yeniden framework’e geçmesi olayının tümüne Inversion Of Control adı verilmektedir.
+
+Bizim kod bloğumuz hariç, bütün her şeyin yönetimi framework tarafından kontrol edilmektedir. Örneğin; Spring ile basit bir not defteri uygulaması geliştirdik. 
+Spring bir framework olduğu için bütün kaynakları kendisi ayarlayacak ve yönetecektir.Yani projeyi Spring başlatacak ve hazır olduğunda sizin kodunuzu çalıştıracaktır. 
+Not defteri için bir kayıt oluşturduğunuzda sizin kodunuzu çalıştıracak ve sizin kodunuzun çalışması bittiğinde kontrolü yeniden 
+Spring Framework’ü devralacaktır. İşte tam olarak bu olaya Inversion of Control denmektedir.
+
+Inversion of Control’ün getirdiği avantajlar;
+*Bir methodun implementasyonundan izole bir şekilde çalıştırılabilmesini sağlar.
+*Farklı implementasyonlar arasında, kolayca geçiş yapabilmenizi sağlar.
+*Program modülerliğini artırır.
+*Bağımlılıklar en aza indiği için test etmeyi/yazmayı kolaylaştırır.
+
+Inversion of control;
+Strategy Pattern
+Service Lacator Pattern
+Factory Pattern
+Dependency Injection
+gibi mekanizmalarla uygulanabilir.
+
+Dependency Injection Spring’in en önemli parçasıdır ve Inversion of Control’ün bir uygulama metotudur.
+
+Dependency Injection nedir, nasıl uygulanır gibi konuları kod örnekleriyle birlikte anlatatım;

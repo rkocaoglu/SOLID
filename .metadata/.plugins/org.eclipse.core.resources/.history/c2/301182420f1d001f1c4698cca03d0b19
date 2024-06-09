@@ -1,0 +1,6 @@
+public class Email {
+
+    public void sendEmail() {
+        //Send emeail
+    }
+}
